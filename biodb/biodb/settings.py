@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     #Third-party apps
     'rest_framework',
-    'django_rest_passwordreset',
+    # 'django_rest_passwordreset',
     'rest_framework.authtoken',
     'corsheaders',
 

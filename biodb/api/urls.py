@@ -7,7 +7,9 @@ from django.conf.urls import url, include
 
 
 urlpatterns = [
-#------------------------------------GATEWAY---------------------------------------#
+#***********************************Protected*****************************************************************
+
+          #------------------------------------GATEWAY---------------------------------------#
     path('api/register', views.RegisterAPI.as_view(), name='register_api'),
     path('api/login', obtain_auth_token, name='api_token_auth'),
     path('api/logout', views.LogoutAPI.as_view(), name='logout_api'),
@@ -15,6 +17,17 @@ urlpatterns = [
     # path('api/reset_password', views.LogoutAPI, name='logout_api'),
     # path('api/reset_password/confirm', views.LogoutAPI, name='logout_api'),
 
-#------------------------------------Extracting---------------------------------------#
-    path('api/ios-healthkit-uploads', views.AppleHealthKitUploadAPIView.as_view(), name='ios-healthkit-uploads'),
+#***********************************Protected*****************************************************************
+
+#***********************************Un-Protected**************************************************************
+
+          #------------------------------------DASHBOARD---------------------------------------#
+    path('api/ios-healthkit-uploads', views.AppleHealthKitUploadAPI.as_view(), name='ios-healthkit-uploads'),
+    path('api/list',views.AppleHealthKitListDataAPI.as_view()),
+    path('api/list/ios-healthkit-uploads', views.AppleHealthKitListUploadAPI.as_view()),
+    # path('api/dashboard', views.DashboardAPI.as_view()),
+    # path('api/chart/data/<str:attribute_name>', views.ChartDataAPI.as_view())
+
+#***********************************Un-Protected**************************************************************
+
 ]

@@ -8,7 +8,6 @@ class AppleHealthKitUploadManager(models.Manager):
         items = AppleHealthKitUpload.objects.all()
         for item in items.all():
             item.delete()
-
 class AppleHealthKitUpload(models.Model):
     """
     Upload image class which is publically accessible to anonymous users
@@ -21,26 +20,34 @@ class AppleHealthKitUpload(models.Model):
         verbose_name_plural = _('Apple Healthkit Uploads')
         default_permissions = ()
         permissions = ()
-
+    was_processed = models.BooleanField(
+    default=False,
+    blank = True,
+    )
     objects = AppleHealthKitUploadManager()
-
-    #
-    #  FIELDS
-    #
-
     data_file = models.FileField(
         upload_to = 'uploads/%Y/%m/%d/',
-        help_text=_('The upload binary file.'),
-    )
+        )
     user = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        null = True,
-        blank = True,
+            null = True,
+            blank = True,
     )
-    #
-    #  FUNCTIONS
-    #
 
     def __str__(self):
-        return str(self.pk)
+        return str(self.id) + " " + str(self.user) + " " + str(self.data_file)
+
+class AppleHealthKitDataDB(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+            null = True,
+            blank = True,
+    )
+
+    creation_date = models.DateField()
+    value = models.FloatField()
+    attribute_name = models.CharField(max_length = 255)
+    def __str__(self):
+        return str(self.creation_date) + " " + str(self.value) + " " + str(self.attribute_name)

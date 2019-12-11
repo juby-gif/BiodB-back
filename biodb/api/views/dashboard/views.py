@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
+
 # from api.serializers.dashboard import DashboardSerializer
 
 
@@ -54,3 +55,46 @@ class AppleHealthKitListDataAPI(generics.ListAPIView):
     def get_queryset(self): # STEP 3
         queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
         return queryset
+
+#
+# class InstrumentListAPI(views.APIView):
+#     authentication_classes = [TokenAuthentication,]
+#     permission_classes = [IsAuthenticated,]
+#
+#     def get(self, request):
+#         instruments = Instrument.objects.filter(user=request.user)
+#         serializer = InstrumentListSerializer(instruments, many=True)
+#         return response.Response(
+#             status=status.HTTP_200_OK,
+#             data=serializer.data,
+#         )
+#
+#
+# class InstrumentRetrieveAPI(views.APIView):
+#     authentication_classes = [TokenAuthentication,]
+#     permission_classes = [IsAuthenticated,]
+#
+#     def get(self, request, id):
+#         instrument = Instrument.objects.get(id=int(id))
+#         serializer = InstrumentRetrieveSerializer(instrument, many=False)
+#         return response.Response(
+#             status=status.HTTP_200_OK,
+#             data=serializer.data,
+#                 )
+#
+#
+# class InstrumentUpdateAPI(views.APIView):
+#     authentication_classes = [TokenAuthentication,]
+#     permission_classes = [IsAuthenticated,]
+#
+#     def put(self, request, id):
+#         instrument = Instrument.objects.get(id=id)
+#         serializer = InstrumentUpdateSerializer(instrument, data=request.data, many=False)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return response.Response(
+#             status=status.HTTP_200_OK,
+#             data={
+#                 'Updated instrument'
+#             }
+#             )

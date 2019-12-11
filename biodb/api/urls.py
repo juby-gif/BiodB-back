@@ -17,16 +17,22 @@ urlpatterns = [
     # path('api/reset_password', views.LogoutAPI, name='logout_api'),
     # path('api/reset_password/confirm', views.LogoutAPI, name='logout_api'),
 
-#***********************************Protected*****************************************************************
-
-#***********************************Un-Protected**************************************************************
 
           #------------------------------------DASHBOARD---------------------------------------#
     path('api/ios-healthkit-uploads', views.AppleHealthKitUploadAPI.as_view(), name='ios-healthkit-uploads'),
     path('api/list',views.AppleHealthKitListDataAPI.as_view()),
     path('api/list/ios-healthkit-uploads', views.AppleHealthKitListUploadAPI.as_view()),
-    # path('api/dashboard', views.DashboardAPI.as_view()),
+
+#***********************************Protected*****************************************************************
+
+
+
+#***********************************Un-Protected**************************************************************
+
+    path('api/dashboard', views.DashboardAPI.as_view()),
     # path('api/chart/data/<str:attribute_name>', views.ChartDataAPI.as_view())
+    path('api/user-profile/retrieve', views.UserprofileRetrieveAPI.as_view(), name='user-profile-retrieve'),
+    path('api/user-profile/update', views.UserprofileUpdateAPI.as_view(), name='user-profile-update'),
 
 #***********************************Un-Protected**************************************************************
 

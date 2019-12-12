@@ -5,10 +5,14 @@ from foundation.models import AppleHealthKitDataDB
 
 
 class DashboardSerializer(serializers.Serializer):
+    attribute_name = serializers.CharField()
+    creation_date = serializers.DateField()
+    value = serializers.FloatField()
+
     def get_values(self, attribute_name):
-    #
-    #     values = AppleHealthKitDataDB.objects.filter(attribute_name=attribute_name).values_list('value',flat=True)
-    #     # print(values)
+
+        values = AppleHealthKitDataDB.objects.filter(user=request.user)
+        print(values)
     #     return values
     #
     # def get_statistics(self, values):

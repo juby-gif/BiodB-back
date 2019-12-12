@@ -25,6 +25,6 @@ class AppleHealthKitListUploadAPI(generics.ListAPIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [IsAuthenticated,]
     serializer_class = ListUploadSerializer
-    def get_queryset(self): # STEP 3.
+    def get_queryset(self):
         queryset = AppleHealthKitUpload.objects.filter(user=self.request.user)
         return queryset

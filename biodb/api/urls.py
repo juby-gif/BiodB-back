@@ -22,6 +22,9 @@ urlpatterns = [
     path('api/ios-healthkit-uploads', views.AppleHealthKitUploadAPI.as_view(), name='ios-healthkit-uploads'),
     path('api/list',views.AppleHealthKitListDataAPI.as_view()),
     path('api/list/ios-healthkit-uploads', views.AppleHealthKitListUploadAPI.as_view()),
+    path('api/user-profile/retrieve', views.UserprofileRetrieveAPI.as_view(), name='user-profile-retrieve'),
+    path('api/user-profile/update', views.UserprofileUpdateAPI.as_view(), name='user-profile-update'),
+
 
 #***********************************Protected*****************************************************************
 
@@ -31,9 +34,7 @@ urlpatterns = [
 
     path('api/dashboard', views.DashboardAPI.as_view()),
     # path('api/chart/data/<str:attribute_name>', views.ChartDataAPI.as_view())
-    path('api/user-profile/retrieve', views.UserprofileRetrieveAPI.as_view(), name='user-profile-retrieve'),
-    path('api/user-profile/update', views.UserprofileUpdateAPI.as_view(), name='user-profile-update'),
-
+    path('api/tsd', views.TimeSeriesDataAPI.as_view()),
 #***********************************Un-Protected**************************************************************
 
 ]

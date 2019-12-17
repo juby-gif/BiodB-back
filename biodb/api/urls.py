@@ -5,7 +5,6 @@ from django.urls import path
 from django.conf.urls import url, include
 
 
-
 urlpatterns = [
 #***********************************Protected*****************************************************************
 
@@ -13,9 +12,6 @@ urlpatterns = [
     path('api/register', views.RegisterAPI.as_view(), name='register_api'),
     path('api/login', obtain_auth_token, name='api_token_auth'),
     path('api/logout', views.LogoutAPI.as_view(), name='logout_api'),
-    # url('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
-    # path('api/reset_password', views.LogoutAPI, name='logout_api'),
-    # path('api/reset_password/confirm', views.LogoutAPI, name='logout_api'),
 
 
           #------------------------------------DASHBOARD---------------------------------------#
@@ -24,7 +20,8 @@ urlpatterns = [
     path('api/list/ios-healthkit-uploads', views.AppleHealthKitListUploadAPI.as_view()),
     path('api/user-profile/retrieve', views.UserprofileRetrieveAPI.as_view(), name='user-profile-retrieve'),
     path('api/user-profile/update', views.UserprofileUpdateAPI.as_view(), name='user-profile-update'),
-
+    path('api/tsd-by-attribute-name', views.TimeSeriesDataFilteredAPI.as_view()),
+    path('api/tsd', views.TimeSeriesDataAPI.as_view()),
 
 #***********************************Protected*****************************************************************
 
@@ -32,9 +29,11 @@ urlpatterns = [
 
 #***********************************Un-Protected**************************************************************
 
-    path('api/dashboard', views.DashboardAPI.as_view()),
     # path('api/chart/data/<str:attribute_name>', views.ChartDataAPI.as_view())
-    path('api/tsd', views.TimeSeriesDataAPI.as_view()),
+    # url('api/password_reset/', include('django_rest_passwordreset.urls', namespace='password_reset')),
+    # path('api/reset_password', views.LogoutAPI, name='logout_api'),
+    # path('api/reset_password/confirm', views.LogoutAPI, name='logout_api'),
+
 #***********************************Un-Protected**************************************************************
 
 ]

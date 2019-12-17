@@ -3,6 +3,5 @@ from api.serializers.gateway.register_serializer import RegisterSerializer
 from api.serializers.dashboard.list_serializer import ListSerializer
 from api.serializers.dashboard.update_user_serializer import UpdateSerializer
 from api.serializers.uploads.list_upload_serializer import ListUploadSerializer
-from api.serializers.dashboard.dashboard_serializer import DashboardSerializer
 # from api.serializers.dashboard.chart_generate_serializer import GraphGenerateSerializer
-from api.serializers.dashboard.sensor_details_serializer import SensorDetailSerializer
+from api.serializers.dashboard.sensor_details_serializer import TimeSeriesDataSerializer

@@ -1,33 +1,14 @@
-from api.serializers import ListSerializer,DashboardSerializer,SensorDetailSerializer
+from api.serializers import ListSerializer,TimeSeriesDataSerializer
 from rest_framework import views,response,status
 from rest_framework import generics
 from foundation.models import AppleHealthKitDataDB
+import statistics
+import math
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
-
-from django.shortcuts import get_object_or_404
-
-
-# from api.serializers.dashboard import DashboardSerializer
-
-
-class DashboardAPI(views.APIView):
-    authentication_classes = [TokenAuthentication,]
-    permission_classes = (IsAuthenticated,)
-    def get(self, request):
-        apple_health_kit_data = AppleHealthKitDataDB.objects.filter(user=request.user)
-        serializer = DashboardSerializer(apple_health_kit_data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-
-        return response.Response(
-            status=status.HTTP_200_OK,
-            data=serializer.data
-        )
-
 
 
 
@@ -60,29 +41,71 @@ class AppleHealthKitListDataAPI(generics.ListAPIView):
     def get_queryset(self): # STEP 3
         queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
         return queryset
-#
+
 # class SensorDetailAPI(views.APIView):
 #     authentication_classes = [TokenAuthentication,]
 #     permission_classes = (IsAuthenticated,)
-#     def get(self, request):
-#         data = AppleHealthKitDataDB.objects.filter(user=request.user)
-#         serializer = SensorDetailSerializer(data=request.data, context = {
-#             'request' : request,
-#         })
-#         serializer.is_valid(raise_exception=True)
-#         serializer.save()
-#
-#         return response.Response(
-#             status=status.HTTP_200_OK,
-#             data=serializer.data
-#         )
-class TimeSeriesDataAPI(generics.ListAPIView):
+#     serializer_class = TimeSeriesDataSerializer
+#     def get_queryset(self):
+#         attribute_name = self.request.query_params.get('attribute_name', None)
+#         queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
+#         if attribute_name is not None:
+#             queryset = queryset.filter(attribute_name=attribute_name)
+#             return queryset,attribute_name
+
+
+class TimeSeriesDataAPI(views.APIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = (IsAuthenticated,)
-    serializer_class = SensorDetailSerializer
-    def get_queryset(self): # STEP 3
+    serializer_class = TimeSeriesDataSerializer
+
+    def get_queryset(self):
         attribute_name = self.request.query_params.get('attribute_name', None)
         queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
         if attribute_name is not None:
             queryset = queryset.filter(attribute_name=attribute_name)
-        return queryset
+            return queryset,attribute_name
+    def get(self,request):
+        values = []
+        queryset,attribute_name = self.get_queryset()
+        sensor_name = attribute_name
+        for datum in queryset:
+            values.append(datum.value)
+
+        try:
+            un_sanitized_mean = statistics.mean(values)
+            mean = math.floor(un_sanitized_mean * 100) / 100.0
+        except Exception as e:
+            mean = "NF"
+        try:
+            un_sanitized_median = statistics.median(values)
+            median = math.floor(un_sanitized_median * 100) / 100.0
+        except Exception as e:
+            median = "NF"
+        try:
+            un_sanitized_mode = statistics.mode(values)
+            mode = math.floor(un_sanitized_mode * 100) / 100.0
+        except Exception as e:
+            mode = "NF"
+        return response.Response (
+            status = status.HTTP_200_OK,
+            data = {
+            'name' : sensor_name,
+            'mean': mean,
+            'median': median,
+            'mode': mode,
+            }
+        )
+
+class TimeSeriesDataFilteredAPI(generics.ListAPIView):
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TimeSeriesDataSerializer
+
+    def get_queryset(self):
+        attribute_name = self.request.query_params.get('attribute_name', None)
+        queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
+
+        if attribute_name is not None:
+            queryset = queryset.filter(attribute_name=attribute_name)
+            return queryset

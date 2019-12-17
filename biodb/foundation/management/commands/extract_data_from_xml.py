@@ -50,7 +50,7 @@ class Command(BaseCommand):
     def process(self,datum):
         self.process_instrument(datum,'HKQuantityTypeIdentifierStepCount')
         self.process_instrument(datum,'HKQuantityTypeIdentifierDistanceWalkingRunning')
-
+        
         datum.was_processed = True
         datum.save()
 
@@ -58,7 +58,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         data = AppleHealthKitUpload.objects.filter(was_processed=False)
         for datum in data:
-            self.process(datum)
-
+            print(self.process(datum))
 
         self.stdout.write(self.style.SUCCESS('Successfully processed Apple HealthKit Data File'))

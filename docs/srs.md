@@ -1,22 +1,37 @@
-BioDB Software Requirement Specification (SRS)
+# BioDB Software Requirement Specification (SRS)
 
-A webapp used to get Apple HealthKit data and provide a dashboard for it
+## A webapp used to get Apple HealthKit data and provide a dashboard for it
 
-Use Cases:
-(1) Login / Logout
-Use “token based authentication” for security purposes
-/api/login
-Username
-Password
+# Use Cases:
+1. Login / Logout
+### Use “token based authentication” for security purposes
+* **URL**
+  * ``127.0.0.1:8000/api/login``
+  * ``127.0.0.1:8000/api/logout``
 
-/api/logout
-(2) Register
-/api/register
-First name
-Last name
-Email
-Username
-Password
+* **Method**
+  * ``POST``
+
+* **Data Params**
+  * username
+  * password
+
+* **URL Params**
+  * None
+
+2. Register
+* **URL**
+  * ``127.0.0.1:8000/api/register``
+  * **Method**
+    * ``POST``
+    * **Data Params**
+      * First name
+      * Last name
+      * Email
+      * Username
+      * Password
+
+
 (3) Dashboard
 A summary page displaying graphs of the health data.
 URL: /api/dashboard

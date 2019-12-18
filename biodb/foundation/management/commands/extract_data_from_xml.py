@@ -50,7 +50,7 @@ class Command(BaseCommand):
     def process(self,datum):
         self.process_instrument(datum,'HKQuantityTypeIdentifierStepCount')
         self.process_instrument(datum,'HKQuantityTypeIdentifierDistanceWalkingRunning')
-        
+
         datum.was_processed = True
         datum.save()
 

@@ -41,13 +41,13 @@ def get_content_file_from_base64_string(data, filename):
     return data
 
 class AppleHealthKitUploadSerializer(serializers.Serializer):
-    # upload_file_name = serializers.CharField(write_only=True, allow_null=False,)
-    # upload_file = serializers.CharField(write_only=True, allow_null=False,)
+    upload_file_name = serializers.CharField(write_only=True, allow_null=False,)
+    upload_file = serializers.CharField(write_only=True, allow_null=False,)
 
     @transaction.atomic
     def create(self, validated_data):
         """
-        Override the `create` function to add extra functinality.
+        Override the `create` function to add extra functionality.
         """
         request = self.context.get('request')
 
@@ -59,10 +59,10 @@ class AppleHealthKitUploadSerializer(serializers.Serializer):
         content_file = get_content_file_from_base64_string(content, filename)
 
         # Create our file.
-        private_file = AppleHealthKitUpload.objects.create(
+        apple_health_kit_export_file = AppleHealthKitUpload.objects.create(
             user = request.user,
             data_file = content_file, # When you attack a `ContentFile`, Django handles all file uploading.
         )
 
         # Return our validated data.
-        return private_file
+        return apple_health_kit_export_file

@@ -16,7 +16,6 @@ class AppleHealthKitUploadAPI(views.APIView):
         return response.Response(
             status=status.HTTP_200_OK,
             data={
-                'data':serializer.data,
                 'Updation Status': "Succesfully Uploaded",
             }
         )

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_cron',
 
     #Third-party apps
     'rest_framework',
@@ -151,11 +152,22 @@ REST_FRAMEWORK = {
 
 STATIC_URL = '/static/'
 CORS_ORIGIN_ALLOW_ALL = True
-DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
-"CLASS": "django_rest_passwordreset.tokens.RandomNumberTokenGenerator",
-"OPTIONS": {
-"min_number": 15,
-"max_number": 99
-}
-}
-DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME=True
+# DJANGO_REST_PASSWORDRESET_TOKEN_CONFIG = {
+# "CLASS": "django_rest_passwordreset.tokens.RandomNumberTokenGenerator",
+# "OPTIONS": {
+# "min_number": 15,
+# "max_number": 99
+# }
+# }
+# DJANGO_REST_MULTITOKENAUTH_RESET_TOKEN_EXPIRY_TIME=True
+
+CRONJOBS = [
+('*/5 * * * *  source /c/Users/16474/Documents/Assignment/biodb-back/env/Scripts/activate && python /c/Users/16474/Documents/Assignment/biodb-back/biodb/manage.py runcrons > /c/Users/16474/Documents/Assignment/biodb-back/cronjob.log')
+]
+
+CRON_CLASSES = [
+    "foundation.crons.MyCronJob",
+    "foundation.crons.ExtractAppleHealthkitData",
+
+    # ...
+]

@@ -1,1 +1,1 @@
-
+from foundation.management.commands.extract_data_from_xml import Command

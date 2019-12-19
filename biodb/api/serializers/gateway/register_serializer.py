@@ -28,7 +28,6 @@ class RegisterSerializer(serializers.Serializer):
         # This is for debugging purposes only.
         print(first_name, last_name, username, email, password)
 
-        # Plug in our data from the request into our `User` model.
         user = User.objects.create_user(username, email, password)
         user.last_name = last_name
         user.first_name = first_name

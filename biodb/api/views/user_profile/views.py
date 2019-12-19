@@ -1,15 +1,16 @@
 from django.http import HttpResponse, JsonResponse
-from foundation.models import AppleHealthKitDataDB
 from rest_framework import views, response, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 
 from api.serializers import UpdateSerializer
+from foundation.models import AppleHealthKitDataDB
 
 
 class UserprofileRetrieveAPI(views.APIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [IsAuthenticated,]
+    
     def get(self,request):
         return response.Response(
             status = status.HTTP_200_OK,
@@ -20,10 +21,10 @@ class UserprofileRetrieveAPI(views.APIView):
              'username': request.user.username,
         })
 
-
 class UserprofileUpdateAPI(views.APIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [IsAuthenticated,]
+
     def put(self,request):
         serializer = UpdateSerializer(request.user, data=request.data, context={
             'request' : request,

@@ -1,6 +1,5 @@
 from django.contrib.auth import authenticate, login, logout
 from rest_framework import views, status, response
-# from django_rest_passwordreset.tokens import BaseTokenGenerator
 from django.core.mail import EmailMultiAlternatives
 from django.dispatch import receiver
 from django.template.loader import render_to_string

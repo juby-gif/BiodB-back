@@ -6,13 +6,14 @@ from django.utils.http import urlquote
 from rest_framework import exceptions, serializers
 from rest_framework.response import Response
 from rest_framework.validators import UniqueValidator
-from foundation.models import AppleHealthKitUpload
-
-
 from django.core.files.base import ContentFile
 import base64
 import six
 import uuid
+
+from foundation.models import AppleHealthKitUpload
+
+
 def get_content_file_from_base64_string(data, filename):
     """
     Function will convert the string and filename parameter and return a

@@ -27,7 +27,6 @@ class UpdateSerializer(serializers.Serializer):
         # This is for debugging purposes only.
         print(first_name, last_name, username, email)
 
-        # Plug in our data from the request into our `User` model.
         request = self.context.get('request')
         user = request.user
         user.last_name = last_name

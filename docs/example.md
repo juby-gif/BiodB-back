@@ -1,4 +1,4 @@
-We are going to test upload the file with the following code:
+## We are going to test upload the file with the following code:
 
 * **Sample Call**
   ```bash
@@ -23,9 +23,16 @@ We are going to test upload the file with the following code:
   # FOR LISTING ALL THE UPLOADED FILES FOR THE USER
   winpty http http://127.0.0.1:8000/api/list/ios-healthkit-uploads 'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
 
-  # FOR FILTERING THE EXTRACTED DATA BY FILTERING AGAINST QUERY PARAMETERS WITH ATTRIBUTE-NAME
+  # FOR FILTERING THE EXTRACTED DATA BY FILTERING AGAINST QUERY PARAMETERS WITH ATTRIBUTE-NAME = Walking and Running
   winpty http http://127.0.0.1:8000/api/tsd?attribute_name='HKQuantityTypeIdentifierDistanceWalkingRunning' 'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
 
+  # FOR FILTERING THE EXTRACTED DATA BY FILTERING AGAINST QUERY PARAMETERS WITH ATTRIBUTE-NAME - Step count
+  winpty http http://127.0.0.1:8000/api/tsd?attribute_name='HKQuantityTypeIdentifierStepCount' 'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
+
+  # For running the commands using crons as background process
+  python manage.py runcrons
+
+  #For making the background process automatic
   contab -e
   */5 * * * *  source /c/Users/16474/Documents/Assignment/biodb-back/env/Scripts/activate && python /c/Users/16474/Documents/Assignment/biodb-back/biodb/manage.py runcrons > /c/Users/16474/Documents/Assignment/biodb-back/cronjob.log
 

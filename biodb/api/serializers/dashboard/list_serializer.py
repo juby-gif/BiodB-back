@@ -1,6 +1,4 @@
-
 from rest_framework import exceptions, serializers
-
 
 class ListSerializer(serializers.Serializer):
 

@@ -1,9 +1,11 @@
-from api.serializers import AppleHealthKitUploadSerializer,ListUploadSerializer
 from rest_framework import views,response,status
 from rest_framework import generics
-from foundation.models import AppleHealthKitUpload
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
+
+from api.serializers import AppleHealthKitUploadSerializer,ListUploadSerializer
+from foundation.models import AppleHealthKitUpload
+
 
 class AppleHealthKitUploadAPI(views.APIView):
     def post(self, request):
@@ -16,6 +18,7 @@ class AppleHealthKitUploadAPI(views.APIView):
         return response.Response(
             status=status.HTTP_200_OK,
             data={
+                'detail': serializer.data,
                 'Updation Status': "Succesfully Uploaded",
             }
         )

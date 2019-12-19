@@ -1,9 +1,9 @@
-import xmltodict
 import json
 from io import StringIO
 from django.core.management.base import BaseCommand, CommandError
 from foundation.models import AppleHealthKitDataDB,AppleHealthKitUpload
 from django.db import transaction
+import xmltodict
 import pandas as pd
 import datetime
 

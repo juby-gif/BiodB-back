@@ -93,16 +93,16 @@
   ```json
   {
     "token": "f5191a796cf1d2946a1a36306a2fba33ff0deb88"
- }
+  }
   ```
 * **Error Message**
   **Status: 400**
   ```json
-  {
+    {
     "non_field_errors": [
         "Unable to log in with provided credentials."
     ]
-}
+  }
 ```
 * **Sample Call**
   ```bash

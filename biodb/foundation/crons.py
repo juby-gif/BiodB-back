@@ -11,11 +11,8 @@ class MyCronJob(CronJobBase):
         print("Hello")
 
 class ExtractAppleHealthkitData(CronJobBase):
-<<<<<<< HEAD
-    RUN_EVERY_MINS = 5 # every 5 mins
-=======
+
     RUN_EVERY_MINS = 5# every 5 mins
->>>>>>> 6952d3afde74012b7a33f0cdd540453100f70b48
     RETRY_AFTER_FAILURE_MINS = 5
 
     schedule = Schedule(run_every_mins=RUN_EVERY_MINS, retry_after_failure_mins=RETRY_AFTER_FAILURE_MINS)

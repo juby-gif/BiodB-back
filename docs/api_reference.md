@@ -35,7 +35,7 @@
     "first_name": "Juby",
     "last_name": "Varughese",
     "username": "juby11"
-}
+  }
 
   ```
 * **Error Message**
@@ -48,16 +48,19 @@
     "username": [
         "This field must be unique."
     ]
-}
-
+  }
   ```
+
   **Status: 400**
+
   ```json
   {
       "error": "The password is not secure."
   }
   ```
+
 * **Sample Call**
+
   ```bash
   winpty http --form POST http://127.0.0.1:8000/api/register \
   first_name="Juby" \
@@ -102,11 +105,11 @@
     "non_field_errors": [
         "Unable to log in with provided credentials."
     ]
-  }
-```
+    }
+  ```
+
 * **Sample Call**
   ```bash
-  # FOR USER LOGIN
   winpty http --form POST http://127.0.0.1:8000/api/login \
   username=juby11 \
   password=123

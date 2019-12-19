@@ -153,13 +153,16 @@
             'Updation Status': "File Upload Failed",
         }
 ```
+
 * **Sample Call**
+
   ```bash
     winpty http --form POST http://127.0.0.1:8000/api/ios-healthkit-uploads \
     'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a' \
     upload_file=export.xml \
     upload_file_name="@export.xml.base64"
   ```
+  
 ## Apple HealthKit List Data
 * **URL**
 
@@ -295,16 +298,20 @@
   ```
 * **Error Message**
   **Status: 400**
+
   ```json
   data={
             'data_file': {}
         }
-```
+  ```
+
 * **Sample Call**
+
   ```bash
     winpty http --form http://127.0.0.1:8000/api/list/ios-healthkit-uploads \
    'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
   ```
+
 ## Retrieve User Profile
 * **URL**
 
@@ -334,20 +341,22 @@
         "last_name": "Varughese",
         "username": "juby11",
       }
-
   ```
+
 * **Error Message**
   **Status: 400**
+
   ```json
       data = {
           "detail":"Authentication credentials were not provided.",
-        }
-```
-* **Sample Call**
-  ```bash
-  winpty http --form http://127.0.0.1:8000/api/user-profile/retrieve \
-  'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
+      }
+  ```
 
+* **Sample Call**
+
+  ```bash
+   winpty http --form http://127.0.0.1:8000/api/user-profile/retrieve \
+  'Authorization: Token 718dbd9ec4f2783254f0266290ee5207e7281f5a'
   ```
 
 ## Update User Profile

@@ -73,4 +73,5 @@ class TimeSeriesDataFilteredAPI(generics.ListAPIView):
 
         if attribute_name is not None:
             queryset = queryset.filter(attribute_name=attribute_name)
-            return queryset
+            
+        return queryset

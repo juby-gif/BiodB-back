@@ -58,6 +58,10 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         data = AppleHealthKitUpload.objects.filter(was_processed=False)
         for datum in data:
-            print(self.process(datum))
+            try:
+                self.process(datum)
+                print("Successfully processed upload with id"+str(datum.id))
+            except Exception as e:
+                print("Failed Processing Upload with id" +str(datum.id))
 
         self.stdout.write(self.style.SUCCESS('Successfully processed Apple HealthKit Data File'))

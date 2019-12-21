@@ -36,6 +36,8 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
         sensor_name = attribute_name
         for datum in queryset:
             values.append(datum.value)
+        maximum = math.floor(max(values) * 100) / 100.0
+        minimum = math.floor(min(values) * 100) / 100.0
 
         try:
             un_sanitized_mean = statistics.mean(values)
@@ -59,6 +61,8 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
             'mean': mean,
             'median': median,
             'mode': mode,
+            'maximum' : maximum,
+            'minimum' : minimum,
             }
         )
 
@@ -73,5 +77,5 @@ class TimeSeriesDataFilteredAPI(generics.ListAPIView):
 
         if attribute_name is not None:
             queryset = queryset.filter(attribute_name=attribute_name)
-            
+
         return queryset

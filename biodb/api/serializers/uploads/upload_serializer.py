@@ -58,7 +58,6 @@ class AppleHealthKitUploadSerializer(serializers.Serializer):
 
         # Convert the base64 data into a `ContentFile` object.
         content_file = get_content_file_from_base64_string(content, filename)
-
         # Create our file.
         apple_health_kit_export_file = AppleHealthKitUpload.objects.create(
             user = request.user,

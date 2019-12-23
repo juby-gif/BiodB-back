@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.authentication import TokenAuthentication
 import statistics
 import math
+from decimal import Decimal
 
 from api.serializers import ListSerializer,TimeSeriesDataSerializer
 from foundation.models import AppleHealthKitDataDB
@@ -14,8 +15,8 @@ from foundation.models import AppleHealthKitDataDB
 class AppleHealthKitListDataAPI(generics.ListAPIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [IsAuthenticated,]
-    serializer_class = ListSerializer # STEP 4
-    def get_queryset(self): # STEP 3
+    serializer_class = ListSerializer
+    def get_queryset(self):
         queryset = AppleHealthKitDataDB.objects.filter(user=self.request.user).order_by('id')
         return queryset
 
@@ -36,23 +37,25 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
         sensor_name = attribute_name
         for datum in queryset:
             values.append(datum.value)
-        maximum = math.floor(max(values) * 100) / 100.0
-        minimum = math.floor(min(values) * 100) / 100.0
+        round_to = 4
+        maximum = round(Decimal(max(values)), round_to)
+        minimum = round(Decimal(min(values)), round_to)
 
         try:
             un_sanitized_mean = statistics.mean(values)
-            mean = math.floor(un_sanitized_mean * 100) / 100.0
+            mean = round(Decimal(un_sanitized_mean), round_to)
         except Exception as e:
             mean = "NF"
         try:
             un_sanitized_median = statistics.median(values)
-            median = math.floor(un_sanitized_median * 100) / 100.0
+            median = round(Decimal(un_sanitized_median), round_to)
         except Exception as e:
             median = "NF"
         try:
             un_sanitized_mode = statistics.mode(values)
-            mode = math.floor(un_sanitized_mode * 100) / 100.0
+            mode = round(Decimal(un_sanitized_mode), round_to)
         except Exception as e:
+            print(e)
             mode = "NF"
         return response.Response (
             status = status.HTTP_200_OK,

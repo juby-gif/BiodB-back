@@ -37,7 +37,7 @@ class Command(BaseCommand):
 
 
         for dates,values in zip(date_list,value_list):
-            #print(dates,values) #For debugging purpose only
+            # print(dates,values) #For debugging purpose only
 
             AppleHealthKitDataDB.objects.create(
                 creation_date = dates,

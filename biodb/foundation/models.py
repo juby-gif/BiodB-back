@@ -38,6 +38,8 @@ class AppleHealthKitUpload(models.Model):
     def __str__(self):
         return str(self.id) + " " + str(self.user) + " " + str(self.data_file)
 
+
+
 class AppleHealthKitDataDB(models.Model):
     user = models.ForeignKey(
         User,

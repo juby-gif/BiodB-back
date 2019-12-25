@@ -48,7 +48,7 @@ class AppleHealthKitDataDB(models.Model):
             blank = True,
     )
 
-    creation_date = models.DateField()
+    creation_date = models.DateTimeField(auto_now = False, blank = False)
     value = models.FloatField()
     attribute_name = models.CharField(max_length = 255)
     def __str__(self):

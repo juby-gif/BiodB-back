@@ -23,7 +23,10 @@ class Command(BaseCommand):
         format = '%Y-%m-%d %H:%M:%S %z'
         df['@creationDate'] = pd.to_datetime(df['@creationDate'],
                                              format=format)
-        date_extraction = [datetime.datetime.date(d) for d in df['@creationDate']]
+        date_extraction = []
+        for d in df['@creationDate']:
+            date_extraction.append(d)
+        
         df['@startDate'] = pd.to_datetime(df['@startDate'],
                                          format=format)
         data.loc[:, '@value'] = pd.to_numeric(

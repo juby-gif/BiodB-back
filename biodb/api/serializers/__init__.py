@@ -1,4 +1,5 @@
 from api.serializers.uploads.upload_serializer import AppleHealthKitUploadSerializer
+from api.serializers.uploads.v2_upload_serializer import AppleHealthKitV2UploadSerializer
 from api.serializers.gateway.register_serializer import RegisterSerializer
 from api.serializers.dashboard.list_serializer import ListSerializer
 from api.serializers.dashboard.update_user_serializer import UpdateSerializer

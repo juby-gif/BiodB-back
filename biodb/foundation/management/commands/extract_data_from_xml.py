@@ -1,61 +1,85 @@
 import json
 from io import StringIO
 from django.core.management.base import BaseCommand, CommandError
-from foundation.models import AppleHealthKitDataDB,AppleHealthKitUpload
 from django.db import transaction
 import xmltodict
 import pandas as pd
-import datetime
+from datetime import datetime
+import xml.etree.ElementTree as ET
+
+from foundation.models import AppleHealthKitDataDB,AppleHealthKitUpload
 
 
 class Command(BaseCommand):
     help = '-'
-
     def process_instrument(self,datum,get_data_type):
+        print(get_data_type)
         input_path = str(datum.data_file.path)
-        with open(input_path, 'r') as xml_file:
-            input_data = xmltodict.parse(xml_file.read())
-        records_list = input_data['HealthData']['Record']
+        root = ET.parse(input_path).getroot()
+        values = []
+        creation_date = []
+        try:
+            for record in root.findall(".Record/[@type='{}']".format(get_data_type)):
+                values.append(float(record.get('value')))
+                creation_date.append(datetime.strptime(record.get('creationDate'), "%Y-%m-%d %H:%M:%S %z"))
+                # print(creation_date)
+        except Exception as e:
+            print(e)
 
-        df = pd.DataFrame(records_list)
-        df['@type'].unique()
-        data = df[df['@type'] == get_data_type]
-        format = '%Y-%m-%d %H:%M:%S %z'
-        df['@creationDate'] = pd.to_datetime(df['@creationDate'],
-                                             format=format)
-        date_extraction = []
-        for d in df['@creationDate']:
-            date_extraction.append(d)
-        
-        df['@startDate'] = pd.to_datetime(df['@startDate'],
-                                         format=format)
-        data.loc[:, '@value'] = pd.to_numeric(
-            data.loc[:, '@value'])
+        for date,value in zip(creation_date,values):
 
-        df = df[df['@sourceName'] == 'iPhone XS']
-        data = data.groupby('@creationDate').sum()
-        date_list = list(date_extraction)
-        value_list = list(data['@value'])
+            # print(date,value) #For debugging purpose only
+            try:
 
+                AppleHealthKitDataDB.objects.create(
+                    creation_date = date,
+                    value = value,
+                    attribute_name = get_data_type,
+                    user = datum.user
+                    )
 
+            except Exception as e:
+                print(e)
 
-        for dates,values in zip(date_list,value_list):
-            # print(dates,values) #For debugging purpose only
-
-            AppleHealthKitDataDB.objects.create(
-                creation_date = dates,
-                value = values,
-                attribute_name = get_data_type,
-                user = datum.user
-            )
 
     @transaction.atomic
     def process(self,datum):
-        self.process_instrument(datum,'HKQuantityTypeIdentifierStepCount')
-        self.process_instrument(datum,'HKQuantityTypeIdentifierDistanceWalkingRunning')
+        is_processed = False
+        while is_processed == False:
 
-        datum.was_processed = True
-        datum.save()
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierHeartRate')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierStepCount')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierDistanceWalkingRunning')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierBasalEnergyBurned')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierBodyMassIndex')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierHeight')
+            except Exception as e:
+                continue
+            try:
+                self.process_instrument(datum,'HKQuantityTypeIdentifierBodyMass')
+            except Exception as e:
+                continue
+
+            datum.was_processed = True
+            datum.save()
+            is_processed = True
+
 
 
     def handle(self, *args, **options):
@@ -66,5 +90,6 @@ class Command(BaseCommand):
                 print("Successfully processed upload with id"+str(datum.id))
             except Exception as e:
                 print("Failed Processing Upload with id" +str(datum.id))
+
 
         self.stdout.write(self.style.SUCCESS('Successfully processed Apple HealthKit Data File'))

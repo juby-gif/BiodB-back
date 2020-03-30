@@ -1,4 +1,4 @@
 from api.views.gateway.views import RegisterAPI, LogoutAPI
-from api.views.uploads.views import AppleHealthKitListUploadAPI,AppleHealthKitUploadAPI
+from api.views.uploads.views import AppleHealthKitListUploadAPI,AppleHealthKitUploadAPI,AppleHealthKitV2UploadAPI
 from api.views.dashboard.views import AppleHealthKitListDataAPI,TimeSeriesDataStatisticsAPI,TimeSeriesDataFilteredAPI
 from api.views.user_profile.views import UserprofileRetrieveAPI,UserprofileUpdateAPI

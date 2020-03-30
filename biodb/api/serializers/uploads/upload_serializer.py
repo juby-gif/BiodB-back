@@ -56,7 +56,6 @@ class AppleHealthKitUploadSerializer(serializers.Serializer):
         content = validated_data.get('upload_file')
         filename = validated_data.get('upload_file_name')
 
-
         # Convert the base64 data into a `ContentFile` object.
         content_file = get_content_file_from_base64_string(content, filename)
         # Create our file.

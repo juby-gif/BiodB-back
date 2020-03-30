@@ -18,7 +18,7 @@ class RegisterAPI(views.APIView):
             status=status.HTTP_201_CREATED,
             data=serializer.data,
         )
-
+        
 class LogoutAPI(views.APIView):
     def post(self,request):
         try:

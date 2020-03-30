@@ -13,7 +13,8 @@ urlpatterns = [
 
 
     #-------------------------------------------DASHBOARD-----------------------------------------------#
-    path('api/ios-healthkit-uploads', views.AppleHealthKitUploadAPI.as_view(), name='ios-healthkit-uploads'),
+    path('api/v1/ios-healthkit-uploads', views.AppleHealthKitUploadAPI.as_view(), name='ios-healthkit-uploads'),
+    path('api/v2/ios-healthkit-uploads', views.AppleHealthKitV2UploadAPI.as_view(), name='ios-healthkit-uploads-v2'),
     path('api/list',views.AppleHealthKitListDataAPI.as_view()),
     path('api/list/ios-healthkit-uploads', views.AppleHealthKitListUploadAPI.as_view()),
 

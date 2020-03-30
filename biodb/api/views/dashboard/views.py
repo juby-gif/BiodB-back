@@ -7,6 +7,8 @@ from rest_framework.authentication import TokenAuthentication
 import statistics
 import math
 from decimal import Decimal
+import datetime
+import matplotlib.pyplot as plt
 
 from api.serializers import ListSerializer,TimeSeriesDataSerializer
 from foundation.models import AppleHealthKitDataDB
@@ -31,43 +33,88 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
         if attribute_name is not None:
             queryset = queryset.filter(attribute_name=attribute_name)
             return queryset,attribute_name
+
+    def get_unit(self,sensor_name):
+        if sensor_name == 'HKQuantityTypeIdentifierHeartRate':
+            return "count/min"
+        elif sensor_name == 'HKQuantityTypeIdentifierStepCount':
+            return "count"
+        elif sensor_name == 'HKQuantityTypeIdentifierBasalEnergyBurned':
+            return "kcal"
+        elif sensor_name == 'HKQuantityTypeIdentifierDistanceWalkingRunning':
+            return "km"
+
+
     def get(self,request):
         values = []
+        creation_date = []
         queryset,attribute_name = self.get_queryset()
-        sensor_name = attribute_name
-        for datum in queryset:
-            values.append(datum.value)
-        round_to = 4
-        maximum = round(Decimal(max(values)), round_to)
-        minimum = round(Decimal(min(values)), round_to)
+        try:
+            if queryset != None:
+                sensor_name = attribute_name
+                for datum in queryset:
+                    values.append(datum.value)
+                    creation_date.append(datetime.datetime.strptime(datum.creation_date,"%Y-%m-%d %H:%M:%S-%f:00"))
+                round_to = 4
+                maximum = round(Decimal(max(values)), round_to)
+                minimum = round(Decimal(min(values)), round_to)
+                try:
+                    un_sanitized_mean = statistics.mean(values)
+                    mean = round(Decimal(un_sanitized_mean), round_to)
+                except Exception as e:
+                    mean = "NF"
+                try:
+                    un_sanitized_median = statistics.median(values)
+                    median = round(Decimal(un_sanitized_median), round_to)
+                except Exception as e:
+                    median = "NF"
+                try:
+                    un_sanitized_mode = statistics.mode(values)
+                    mode = round(Decimal(un_sanitized_mode), round_to)
+                except Exception as e:
+                    mode = "NF"
+                # try:
+                #     x = creation_date
+                #     y = values
+                #     # plotting the points
+                #     plt.plot(x, y)
+                #     # naming the x axis
+                #     plt.xlabel('Creation Date')
+                #     # naming the y axis
+                #     plt.ylabel("Values Recorded in '{}'".format(self.get_unit(sensor_name)))
+                #     # giving a title to my graph
+                #     plt.title("Statistics of '{}'".format(sensor_name))
+                #     # function to show the plot
+                #     plt.show()
+                #
+                # except Exception as e:
+                #     print(e)
 
-        try:
-            un_sanitized_mean = statistics.mean(values)
-            mean = round(Decimal(un_sanitized_mean), round_to)
+                return response.Response (
+                    status = status.HTTP_200_OK,
+                    data = {
+                    'name' : sensor_name,
+                    'mean': mean,
+                    'median': median,
+                    'mode': mode,
+                    'maximum' : maximum,
+                    'minimum' : minimum,
+                    }
+                )
+            else:
+                return response.Response (
+                    status = status.HTTP_200_OK,
+                    data = {
+                    'Error':"Sorry No Records Were Found!"
+                    }
+                )
         except Exception as e:
-            mean = "NF"
-        try:
-            un_sanitized_median = statistics.median(values)
-            median = round(Decimal(un_sanitized_median), round_to)
-        except Exception as e:
-            median = "NF"
-        try:
-            un_sanitized_mode = statistics.mode(values)
-            mode = round(Decimal(un_sanitized_mode), round_to)
-        except Exception as e:
-            print(e)
-            mode = "NF"
-        return response.Response (
-            status = status.HTTP_200_OK,
-            data = {
-            'name' : sensor_name,
-            'mean': mean,
-            'median': median,
-            'mode': mode,
-            'maximum' : maximum,
-            'minimum' : minimum,
-            }
-        )
+            return response.Response (
+                status = status.HTTP_200_OK,
+                data = {
+                'Error': "Sorry No Records Were Found!"
+                }
+            )
 
 class TimeSeriesDataFilteredAPI(generics.ListAPIView):
     authentication_classes = [TokenAuthentication,]
@@ -80,5 +127,6 @@ class TimeSeriesDataFilteredAPI(generics.ListAPIView):
 
         if attribute_name is not None:
             queryset = queryset.filter(attribute_name=attribute_name)
+
 
         return queryset

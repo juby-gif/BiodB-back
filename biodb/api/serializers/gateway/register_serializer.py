@@ -18,12 +18,13 @@ class RegisterSerializer(serializers.Serializer):
     )
     password = serializers.CharField(write_only=True)
 
+
     def create(self, validated_data):
         first_name = validated_data.get('first_name', None)
         last_name = validated_data.get('last_name', None)
-        email = validated_data.get('email')
-        username = validated_data.get('username')
-        password = validated_data.get('password')
+        email = validated_data.get('email', None)
+        username = validated_data.get('username', None)
+        password = validated_data.get('password', None)
 
         # This is for debugging purposes only.
         print(first_name, last_name, username, email, password)

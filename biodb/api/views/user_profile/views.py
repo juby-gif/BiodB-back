@@ -10,7 +10,7 @@ from foundation.models import AppleHealthKitDataDB
 class UserprofileRetrieveAPI(views.APIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = [IsAuthenticated,]
-    
+
     def get(self,request):
         return response.Response(
             status = status.HTTP_200_OK,
@@ -19,6 +19,8 @@ class UserprofileRetrieveAPI(views.APIView):
              'last_name': request.user.last_name,
              'email': request.user.email,
              'username': request.user.username,
+             # 'date_of_birth': request.user.date_of_birth,
+             # 'blood_type': request.user.blood_type,
         })
 
 class UserprofileUpdateAPI(views.APIView):

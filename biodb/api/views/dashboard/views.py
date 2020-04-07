@@ -8,7 +8,8 @@ import statistics
 import math
 from decimal import Decimal
 import datetime
-import matplotlib.pyplot as plt
+from foundation.drf.pagination import BioDBPagination
+# import matplotlib.pyplot as plt
 
 from api.serializers import ListSerializer,TimeSeriesDataSerializer
 from foundation.models import AppleHealthKitDataDB
@@ -120,6 +121,7 @@ class TimeSeriesDataFilteredAPI(generics.ListAPIView):
     authentication_classes = [TokenAuthentication,]
     permission_classes = (IsAuthenticated,)
     serializer_class = TimeSeriesDataSerializer
+    pagination_class = BioDBPagination
 
     def get_queryset(self):
         attribute_name = self.request.query_params.get('attribute_name', None)

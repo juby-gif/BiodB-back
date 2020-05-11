@@ -9,6 +9,9 @@ import math
 from decimal import Decimal
 import datetime
 from foundation.drf.pagination import BioDBPagination
+import django_filters
+
+from django.db.models import Q
 # import matplotlib.pyplot as plt
 
 from api.serializers import ListSerializer,TimeSeriesDataSerializer
@@ -74,9 +77,10 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
                     mode = round(Decimal(un_sanitized_mode), round_to)
                 except Exception as e:
                     mode = "NF"
-                # try:
-                #     x = creation_date
-                #     y = values
+                try:
+                    x = creation_date
+                    y = values
+                    print(x,y)
                 #     # plotting the points
                 #     plt.plot(x, y)
                 #     # naming the x axis
@@ -88,8 +92,8 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
                 #     # function to show the plot
                 #     plt.show()
                 #
-                # except Exception as e:
-                #     print(e)
+                except Exception as e:
+                    print(e)
 
                 return response.Response (
                     status = status.HTTP_200_OK,
@@ -100,6 +104,8 @@ class TimeSeriesDataStatisticsAPI(views.APIView):
                     'mode': mode,
                     'maximum' : maximum,
                     'minimum' : minimum,
+                    'creation_date': x,
+                    'value': y,
                     }
                 )
             else:
@@ -132,3 +138,27 @@ class TimeSeriesDataFilteredAPI(generics.ListAPIView):
 
 
         return queryset
+
+class CreationDateFiltering(django_filters.FilterSet):
+    authentication_classes = [TokenAuthentication,]
+    permission_classes = (IsAuthenticated,)
+    serializer_class = TimeSeriesDataSerializer
+
+    #Special thanks to bartmika
+    #citation:https://github.com/nwatchcanada/nwapp-back/blob/master/nwapp/nwapp/urls.py
+
+    ordering = django_filters.OrderingFilter(
+        fields=(
+            ('search_creation_date', 'creation_date'),
+        ))
+
+    def filter_creation_date(self, queryset, creation_date, value):
+        return queryset.filter(
+            Q(search_creation_date__icontains=value) |
+            Q(search_creation_date__istartswith=value) |
+            Q(search_creation_date__iendswith=value) |
+            Q(search_creation_date__exact=value) |
+            Q(search_creation_date__icontains=value)
+        )
+
+    creation_date = django_filters.CharFilter(method='filter_creation_date')
